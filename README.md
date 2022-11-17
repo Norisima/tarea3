@@ -3,7 +3,7 @@
 * Felinos: (Registros de presencia de felinos de Costa Rica, agrupados por la Infraestructura Mundial de Información en Biodiversidad (GBIF).)
 
 ### Insumos:
-*(Áreas silvestres protegidas (ASP) de Costa Rica, publicadas por el Sistema Nacional de Áreas de Conservación (Sinac) en el Sistema Nacional de Información Territorial (SNIT).)
+*[Áreas silvestres protegidas (ASP) de Costa Rica, publicadas por el Sistema Nacional de Áreas de Conservación (Sinac) en el Sistema Nacional de Información Territorial (SNIT]
 *(Capa raster de WorldClim de altitud de Costa Rica en resolución de 30 x 30 segundos. (Enlace al sitio de WorldClim).)
 
 *Interpretación*
