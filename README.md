@@ -1,10 +1,10 @@
 # TAREA 3
 ## Analisis de Datos:
-* Felinos: (Registros de presencia de felinos de Costa Rica, agrupados por la Infraestructura Mundial de Información en Biodiversidad (GBIF).)
+* Felinos: (Registros de presencia de felinos de Costa Rica, agrupados por la Infraestructura Mundial de Información en Biodiversidad (GBIF). (https://www.gbif.org/occurrence/download/0141580-220831081235567)
 
 ### Insumos:
-*[Áreas silvestres protegidas (ASP) de Costa Rica, publicadas por el Sistema Nacional de Áreas de Conservación (Sinac) en el Sistema Nacional de Información Territorial (SNIT] (https://www.gbif.org/occurrence/download/0141580-220831081235567)
-*(Capa raster de WorldClim de altitud de Costa Rica en resolución de 30 x 30 segundos. (Enlace al sitio de WorldClim).)
+*Áreas silvestres protegidas (ASP) de Costa Rica, publicadas por el Sistema Nacional de Áreas de Conservación (Sinac) en el Sistema Nacional de Información Territorial (SNIT) (https://www.snitcr.go.cr/ico_servicios_ogc_info?k=bm9kbzo6NDA=&nombre=SINAC)
+*Capa raster de WorldClim de altitud de Costa Rica en resolución de 30 x 30 segundos. (https://www.worldclim.org/)
 
 *Interpretación*
 Los datos de análisis de felinos tienen fechas desde el año 1963 hasta el año 2022, con distribuciones en la mayoría del país.  Para el análisis visual de los datos de felinos y su distribución se utilizaron las capas de felinos, capa de Áreas Silvestres Protegidas, el raster wordclim y dos Basemaps (OpenStreetMap y NatGeo).
