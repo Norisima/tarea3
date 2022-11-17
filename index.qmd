@@ -1,0 +1,169 @@
+---
+title: "index"
+format: html
+editor: visual
+---
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+felinos <-
+  read_delim(
+    file = "felinos.csv",
+    col_select = c(
+      "species",
+      "stateProvince",
+      "locality",
+      "eventDate",
+      "decimalLongitude",
+      "decimalLatitude",
+    ) 
+  )
+
+felinos <-
+  felinos |>
+  rename(
+    especie = species,
+    provincia = stateProvince,
+    localidad = locality,
+    fecha = eventDate,
+    long= decimalLongitude,
+    lat= decimalLatitude
+  )
+
+felinos <-
+  felinos |>
+  mutate(fecha = as.Date(fecha, format = "%d/%m/%Y"))
+
+
+```
+```{r}
+library(DT)
+
+felinos |>
+  select(especie, provincia, localidad, fecha)|>
+  datatable(options = list(
+    pageLength = 5,
+    language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+  ))
+```
+```{r}
+felinos <-
+  felinos |>
+  mutate(year = as.numeric(format(fecha,'%Y'))) |>
+  mutate(month = as.numeric(format(fecha,'%m'))) |> 
+  arrange((month))|>
+  mutate(day = as.numeric(format(fecha,'%d')))
+
+```
+
+```{r}
+#| message: false
+#| warning: false
+library(plotly)
+grafico_barras_ggplot2 <-
+felinos |>
+  ggplot(aes(x = month, fill = especie)) +
+  scale_x_continuous(breaks = seq(1,12,1))+
+  scale_x_continuous(breaks = seq(1,12,1), labels = c("1" = "Enero", "2" = "Febrero", "3" = "Marzo", "4" = "Abril", 
+           "5" = "Mayo", "6" = "Junio", "7" = "Julio", "8" = "Agosto", 
+           "9" =  "Septiembre", "10" =  "Octubre", "11" =  "Noviembre", "12" =  "Diciembre"))+
+  geom_bar() +
+  ggtitle("Cantidad de Registros por Especie en Cada mes") +
+  xlab("meses") +
+  ylab("Cantidad") +
+  labs(fill = "Especie") +
+  theme_minimal()
+
+# Gráfico de barras plotly
+ggplotly(grafico_barras_ggplot2) |> 
+  config(locale = 'es')
+```
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+ASP <-
+  st_read(
+    "Areassilvestresprotegidas.shp",
+    quiet = TRUE # para evitar el despliegue de mensajes
+  )
+st_crs(ASP)
+
+# Transformación del CRS del objeto provincias a WGS84 (EPSG = 4326)
+ASP <-
+  ASP |>
+  st_transform(4326)
+
+
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+library(leafem)
+library(leaflet)
+library(leaflet.extras)
+library(leaflet.providers)
+library(terra)
+library(raster)
+library(rgdal)
+
+
+altitud <- rast("altitud.tif")
+
+felinos3 <-
+  st_as_sf(felinos, coords = c("long", "lat"))
+
+st_crs(felinos3) <- 4326
+
+
+leaflet() |>
+  setView(# centro y nivel inicial de acercamiento
+    lng = -84.19452,
+    lat = 9.572735,
+    zoom = 7) |>
+  addTiles(group = "OpenStreetMap") |>
+  addProviderTiles(providers$Esri.NatGeoWorldMap)|>
+  addRasterImage(raster(altitud))|>
+  addPolygons(
+    # capa de provincias (polígonos)
+    data = ASP,
+    color = "black",
+    fillColor = "transparent",
+    stroke = TRUE,
+    weight = 1.0
+  ) |>
+  addCircleMarkers(
+    # capa de registros de presencia (puntos)
+    data = felinos3,
+    stroke = F,
+    radius = 4,
+    fillColor = 'blue',
+    fillOpacity = 1,
+    group = "Felinos",
+    popup = paste(
+      paste0("<strong>Especie: </strong>", felinos$especie),
+      paste0("<strong>Localidad: </strong>", felinos$localidad),
+      paste0("<strong>Fecha: </strong>", felinos$fecha)
+    )
+  ) |>
+  addLayersControl(
+    baseGroups = c("OpenStreetMap", "Esri.NatGeoWorldMap"),
+    overlayGroups = c("Felinos", "altitud", "ASP")) |> # control de capas
+  addResetMapButton() |> # botón de reinicio
+  addSearchOSM() |> # búsqueda en OSM
+  addMouseCoordinates() |> # coordenadas del puntero del ratón
+  addScaleBar(position = "bottomleft", options = scaleBarOptions(imperial = FALSE)) |> # barra de escala
+  addMiniMap(position = "bottomleft")  # mapa de ubicación
+```
+
