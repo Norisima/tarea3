@@ -14,3 +14,4 @@ El primer análisis visual es por medio de un gráfico de barras, donde se puede
 El segundo análisis visual es por medio de mapa dinámico donde se observan los registros de los felinos con puntos azules, se observa que la distribución de los felinos esta por agrupaciones en el país.  
 
 
+https://github.com/Norisima/tarea3.git
